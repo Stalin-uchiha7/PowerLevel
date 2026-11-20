@@ -4,6 +4,7 @@ import SwiftUI
 /// "About Power Level": a small native window with the mascot, version, what the app is and link buttons.
 enum AboutPanel {
     static let repo = URL(string: "https://github.com/Stalin-uchiha7/PowerLevel")!
+    static let author = URL(string: "https://github.com/Stalin-uchiha7")!
     static let links: [(String, URL)] = [
         ("GitHub", repo),
         ("Releases", URL(string: "https://github.com/Stalin-uchiha7/PowerLevel/releases")!),
@@ -21,35 +22,13 @@ enum AboutPanel {
         return build.map { "Version \(short) (\($0))" } ?? "Version \(short)"
     }
 
-    @MainActor private static var window: NSWindow?
+    @MainActor private static var window: PanelWindow?
 
     @MainActor static func show() {
-        let w = window ?? makeWindow()
-        if window == nil { w.center() }
+        let w = window ?? PanelWindow.make(title: "About Power Level", content: AboutView())
         window = w
-        NSApp.activate(ignoringOtherApps: true)
-        w.makeKeyAndOrderFront(nil)
+        w.present()
     }
-
-    @MainActor private static func makeWindow() -> NSWindow {
-        let host = NSHostingView(rootView: AboutView())
-        let w = AboutWindow(contentRect: NSRect(origin: .zero, size: host.fittingSize),
-                            styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
-        w.title = "About Power Level"
-        w.titleVisibility = .hidden
-        w.titlebarAppearsTransparent = true
-        w.isMovableByWindowBackground = true
-        w.isReleasedWhenClosed = false
-        w.backgroundColor = NSColor(Scouter.background)
-        w.contentView = host
-        w.setContentSize(host.fittingSize)
-        return w
-    }
-}
-
-/// Closes on Escape, like the standard About panel.
-private final class AboutWindow: NSWindow {
-    override func cancelOperation(_ sender: Any?) { close() }
 }
 
 struct AboutView: View {
@@ -66,6 +45,15 @@ struct AboutView: View {
             Text(AboutPanel.tagline)
                 .font(.callout)
                 .multilineTextAlignment(.center)
+            VStack(spacing: 2) {
+                HStack(spacing: 4) {
+                    Text("Made by")
+                    Link("Stalin-uchiha7", destination: AboutPanel.author).underline()
+                }
+                Link("github.com/Stalin-uchiha7/PowerLevel", destination: AboutPanel.repo).underline()
+            }
+            .font(.system(.caption, design: .monospaced))
+            .tint(Scouter.green)
             HStack(spacing: 8) {
                 ForEach(AboutPanel.links, id: \.0) { link in
                     Button(link.0) { NSWorkspace.shared.open(link.1) }

@@ -28,6 +28,19 @@ final class SystemMonitor: ObservableObject {
     @Published var shoutEnabled: Bool = UserDefaults.standard.object(forKey: "shoutEnabled") as? Bool ?? false {
         didSet { UserDefaults.standard.set(shoutEnabled, forKey: "shoutEnabled") }
     }
+    /// Seconds between samples.
+    @Published var refreshInterval: Double = UserDefaults.standard.object(forKey: "refreshInterval") as? Double ?? 2 {
+        didSet {
+            UserDefaults.standard.set(refreshInterval, forKey: "refreshInterval")
+            startTimer()
+        }
+    }
+    @Published var enemyCount: Int = UserDefaults.standard.object(forKey: "enemyCount") as? Int ?? 6 {
+        didSet { UserDefaults.standard.set(enemyCount, forKey: "enemyCount") }
+    }
+    @Published var showNumber: Bool = UserDefaults.standard.object(forKey: "showNumber") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(showNumber, forKey: "showNumber") }
+    }
 
     let memoryTotal = ProcessInfo.processInfo.physicalMemory
     static let historyLength = 60
@@ -46,7 +59,12 @@ final class SystemMonitor: ObservableObject {
 
     init() {
         sample()
-        let t = Timer(timeInterval: 2, repeats: true) { [weak self] _ in
+        startTimer()
+    }
+
+    private func startTimer() {
+        timer?.invalidate()
+        let t = Timer(timeInterval: min(max(refreshInterval, 1), 10), repeats: true) { [weak self] _ in
             Task { @MainActor in self?.sample() }
         }
         RunLoop.main.add(t, forMode: .common)   // keep ticking while the popover is open
@@ -144,7 +162,7 @@ final class SystemMonitor: ObservableObject {
 
         enemies = ranked
             .sorted { $0.cpu > $1.cpu }
-            .prefix(6)
+            .prefix(max(enemyCount, 1))
             .map { entry in
                 let app = NSRunningApplication(processIdentifier: entry.pid)
                 return Enemy(

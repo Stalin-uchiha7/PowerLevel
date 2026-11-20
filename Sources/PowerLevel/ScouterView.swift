@@ -120,13 +120,11 @@ struct ScouterView: View {
 
     private var footer: some View {
         HStack {
-            Toggle("Shout at 9000", isOn: $monitor.shoutEnabled)
-                .toggleStyle(.switch)
-                .controlSize(.mini)
-                .font(.caption)
-            Spacer()
+            Button("Settings") { SettingsPanel.show(monitor: monitor) }
+                .controlSize(.small)
             Button("About") { AboutPanel.show() }
                 .controlSize(.small)
+            Spacer()
             Button("Quit") { NSApp.terminate(nil) }
                 .controlSize(.small)
         }

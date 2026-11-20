@@ -37,7 +37,7 @@ struct MenuBarLabel: View {
         let value = form == .over9000 ? "9000+!" : monitor.powerLevel.formatted()
         HStack(spacing: 3) {
             Image(systemName: form.symbol)
-            Text(value).monospacedDigit()
+            if monitor.showNumber { Text(value).monospacedDigit() }
         }
     }
 }
