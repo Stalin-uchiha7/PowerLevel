@@ -48,7 +48,7 @@ struct ScouterView: View {
                     .font(.system(size: 42, weight: .heavy, design: .monospaced))
                 Spacer()
                 MascotView(form: form)
-                    .frame(width: 72, height: 84)
+                    .frame(width: 80, height: 104)
             }
             Text(form.title)
                 .font(.system(.headline, design: .monospaced))
