@@ -11,8 +11,9 @@ VERSION=$(tr -d '[:space:]' < version.txt)
 BUILD=${POWERLEVEL_BUILD_NUMBER:-$(git rev-list --count HEAD 2>/dev/null || echo 1)}
 APP="build/PowerLevel.app"
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/PowerLevel "$APP/Contents/MacOS/PowerLevel"
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"   # made by scripts/make-icon.py
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -28,6 +29,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleVersion</key><string>$BUILD</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>NSHumanReadableCopyright</key><string>© 2026 Stalin Nadar · MIT License</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>NSHighResolutionCapable</key><true/>
     <key>LSUIElement</key><true/>
 </dict>
