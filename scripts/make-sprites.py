@@ -22,8 +22,8 @@ def body(pose, face, hair, extra, long):
     if long:
         for y in range(10, 29):
             half = 8 if y < 22 else 8 - (y - 21)
-            rect(g, 16 - half, y, 15 + half, y, 'B')
-        for (x, y) in [(8, 18), (8, 19), (23, 20), (23, 21), (9, 24), (22, 25), (15, 26), (16, 27)]: put(g, x, y, 'H')
+            rect(g, 16 - half, y, 15 + half, y, 'H'); put(g, 16 - half, y, 'B'); put(g, 15 + half, y, 'B')
+        for (x, y) in [(8, 18), (23, 20), (9, 24), (22, 25), (15, 26), (16, 27)]: put(g, x, y, 'L')
 
     # ---- legs, boots
     if pose == 0:
@@ -53,17 +53,20 @@ def body(pose, face, hair, extra, long):
     sym(g, 10, 5, 10, 7, 'd')
     put(g, 20, 8, 'd'); put(g, 20, 9, 'd'); put(g, 16, 8, 'd')
 
-    # ---- hair: a cap, a fringe and five shaded spikes (taller and more upright when powered up)
+    # ---- hair: a full cap, side locks, a fringe and seven shaded spikes (taller and more upright when powered up)
     hs = 'j' if hair == 'calm' else 'h'
-    rows(g, [(0, R(8, 23)), (1, R(9, 22)), (2, R(10, 21)), (3, [10, 11, 12, 15, 16, 19, 20, 21]),
-             (4, [10, 11, 16, 21]), (5, [10, 21])], hc)
-    rows(g, [(1, [12, 18]), (2, [13, 19])], hl); rows(g, [(1, [22]), (2, [21]), (3, [21, 16])], hs)
+    rows(g, [(-2, R(10, 21)), (-1, R(9, 22)), (0, R(8, 23)), (1, R(8, 23)), (2, R(9, 22)),
+             (3, [9, 10, 11, 12, 15, 16, 17, 20, 21, 22]), (4, [9, 10, 11, 16, 21, 22]), (5, [9, 10, 21, 22]), (6, [9, 22])], hc)
+    rows(g, [(-1, [12, 13]), (0, [11, 17]), (1, [12, 18]), (3, [15])], hl)
+    rows(g, [(0, [23]), (1, [23, 15]), (2, [22, 14]), (3, [22, 17]), (4, [22]), (5, [22]), (6, [22])], hs)
     if hair != 'spiky':
-        spikes = [(9, 13, 6, -2), (19, 23, 26, -3), (11, 15, 10, -6), (17, 21, 21, -5), (14, 18, 15, -8)]
+        spikes = [(8, 12, 4, 0), (20, 23, 27, -1), (9, 14, 7, -6), (18, 23, 25, -6),
+                  (11, 16, 12, -9), (16, 21, 21, -8), (13, 18, 16, -10)]
     else:
-        up = 2 if extra else 0
-        spikes = [(8, 13, 5, -5), (19, 24, 27, -6), (10, 15, 10, -9 - up), (17, 22, 22, -10 - up), (13, 18, 16, -12 - up)]
-        if extra: spikes = [(8, 11, 3, 0), (21, 24, 29, -1)] + spikes
+        up = 1 if extra else 0
+        spikes = [(8, 12, 2, -3), (20, 23, 29, -4), (9, 14, 6, -9), (18, 23, 26, -9),
+                  (11, 16, 11, -11 - up), (16, 21, 21, -11 - up), (13, 18, 16, -12 - up)]
+        if extra: spikes = [(8, 11, 1, 2), (21, 24, 30, 1)] + spikes
     for (x0, x1, tx, ty) in spikes:
         for y in range(ty, 1):
             t = (y - ty) / max(-ty, 1)
@@ -156,9 +159,9 @@ def aura(g, tier):
     return g
 
 PAL = {'k': (0x3a, 0x3a, 0x55), 'K': (0x5c, 0x5c, 0x80), 's': (0xf1, 0xc2, 0x7d), 'S': (0xff, 0xdd, 0xa8),
-       'd': (0xc6, 0x86, 0x42), 'g': (0x29, 0x6b, 0xdb), 'G': (0x1a, 0x45, 0x99), 'v': (0x40, 0xff, 0x80),
-       'V': (0x1c, 0x9a, 0x50), 'e': (0x14, 0x14, 0x1c), 'w': (0xff, 0xff, 0xff), 'o': (0xee, 0x78, 0x1a),
-       'O': (0x9e, 0x48, 0x0d), 'j': (0x24, 0x24, 0x38), 'F': (0x5a, 0x93, 0xf0), 'p': (0xff, 0x8c, 0x1a), 'm': (0x8a, 0x2c, 0x2c)}
+       'd': (0xc6, 0x86, 0x42), 'g': (0xf0, 0x7a, 0x18), 'G': (0xb0, 0x4e, 0x0a), 'v': (0x40, 0xff, 0x80),
+       'V': (0x1c, 0x9a, 0x50), 'e': (0x14, 0x14, 0x1c), 'w': (0xff, 0xff, 0xff), 'o': (0x4a, 0x4a, 0x5c),
+       'O': (0x26, 0x26, 0x32), 'j': (0x24, 0x24, 0x38), 'F': (0xff, 0xa6, 0x52), 'p': (0xf2, 0xee, 0xe0), 'm': (0x8a, 0x2c, 0x2c)}
 ACC = [(0x40,0xff,0x80),(0xff,0x45,0x3a),(0xff,0xd6,0x0a),(0xff,0xd9,0x33),(0xff,0xa8,0x14),(0xff,0x38,0x70),(0x38,0xb8,0xff),(0xd6,0xe4,0xff)]
 BG = (5, 20, 10)
 def mix(a, b, t): return tuple((a[i] * (100 - t) + b[i] * t) // 100 for i in range(3))
