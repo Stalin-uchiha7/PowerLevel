@@ -18,9 +18,9 @@ struct MascotView: View {
         "G": Color(red: 0.69, green: 0.31, blue: 0.04),
         "e": Color(red: 0.08, green: 0.08, blue: 0.11),
         "w": .white,
-        "o": Color(red: 0.29, green: 0.29, blue: 0.36),
-        "O": Color(red: 0.15, green: 0.15, blue: 0.20),
-        "p": Color(red: 0.95, green: 0.93, blue: 0.88),
+        "o": Color(red: 0.12, green: 0.25, blue: 0.65),
+        "O": Color(red: 0.06, green: 0.12, blue: 0.38),
+        "p": Color(red: 0.12, green: 0.35, blue: 0.85),
         "m": Color(red: 0.54, green: 0.17, blue: 0.17),
     ]
     /// Cells drawn in the form colour, with a white or black wash on top (positive lightens, negative darkens).
