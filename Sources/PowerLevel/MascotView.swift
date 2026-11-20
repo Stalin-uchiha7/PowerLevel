@@ -1,8 +1,8 @@
 import SwiftUI
 import AppKit
 
-/// Original 8-bit mascot, drawn in code from `PixelSprite`: a small fighter with a scouter visor whose pose, face
-/// and aura follow the form. It is a static drawing, so it only redraws when the form changes.
+/// Original 8-bit mascot, drawn in code from `PixelSprite`: a spiky-haired fighter with a scouter visor whose pose, face,
+/// hair and aura follow the form. It is a static drawing, so it only redraws when the form changes.
 struct MascotView: View {
     let form: PowerForm
 
@@ -17,7 +17,8 @@ struct MascotView: View {
     }
 
     private static let palette: [Character: Color] = [
-        "k": Color(red: 0.42, green: 0.27, blue: 0.16),
+        "k": Color(red: 0.29, green: 0.29, blue: 0.40),
+        "p": Color(red: 0.61, green: 0.42, blue: 0.88),
         "s": Color(red: 0.95, green: 0.76, blue: 0.49),
         "d": Color(red: 0.78, green: 0.53, blue: 0.26),
         "g": Color(red: 0.15, green: 0.69, blue: 0.57),
@@ -43,12 +44,13 @@ struct MascotView: View {
                 for (x, cell) in row.enumerated() where cell != "." {
                     let color: Color
                     switch cell {
-                    case "b", "h", "A": color = accent
+                    case "b", "H", "A": color = accent
                     case "a": color = accent.opacity(0.45)
                     default: color = Self.palette[cell] ?? .clear
                     }
                     let rect = CGRect(x: ox + Double(x) * px, y: oy + Double(y) * px, width: px, height: px)
                     ctx.fill(Path(rect), with: .color(color))
+                    if cell == "H" { ctx.fill(Path(rect), with: .color(.white.opacity(0.4))) }
                 }
             }
         }
@@ -66,7 +68,7 @@ enum MascotSnapshot {
             ("3-super2", .superSaiyan2), ("4-over9000", .over9000),
         ]
         for (name, form) in forms {
-            save(MascotView(form: form).frame(width: 144, height: 156).background(Scouter.background),
+            save(MascotView(form: form).frame(width: 144, height: 168).background(Scouter.background),
                  to: dir.appendingPathComponent("\(name).png"))
         }
         save(ScouterView(monitor: SystemMonitor()), to: dir.appendingPathComponent("popover.png"))
