@@ -101,9 +101,9 @@ final class SystemMonitor: ObservableObject {
         }
         guard kr == KERN_SUCCESS else { return 0 }
         let page = UInt64(vm_kernel_page_size)
-        let internal = UInt64(stats.internal_page_count)
+        let appPages = UInt64(stats.internal_page_count)
         let purgeable = UInt64(stats.purgeable_count)
-        let app = internal > purgeable ? internal - purgeable : 0
+        let app = appPages > purgeable ? appPages - purgeable : 0
         return (app + UInt64(stats.wire_count) + UInt64(stats.compressor_page_count)) * page
     }
 
