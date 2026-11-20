@@ -57,7 +57,7 @@ struct AboutView: View {
             HStack(spacing: 8) {
                 ForEach(AboutPanel.links, id: \.0) { link in
                     Button(link.0) { NSWorkspace.shared.open(link.1) }
-                        .controlSize(.small)
+                        .buttonStyle(ScouterButtonStyle())
                 }
             }
             .padding(.top, 4)

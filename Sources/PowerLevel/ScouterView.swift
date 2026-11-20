@@ -102,6 +102,7 @@ struct ScouterView: View {
             }
             Spacer()
             Button("Blast") { monitor.blast(enemy, force: false) }
+                .buttonStyle(ScouterButtonStyle(compact: true))
                 .help("Quit the process (SIGTERM)")
             Button(confirmForce == enemy.id ? "Sure?" : "Force") {
                 if confirmForce == enemy.id {
@@ -111,23 +112,19 @@ struct ScouterView: View {
                     confirmForce = enemy.id
                 }
             }
+            .buttonStyle(ScouterButtonStyle(tint: confirmForce == enemy.id ? .red : Scouter.green, compact: true))
             .help("Force kill (SIGKILL). Click twice.")
-            .foregroundStyle(confirmForce == enemy.id ? .red : Scouter.green)
         }
-        .buttonStyle(.bordered)
-        .controlSize(.mini)
     }
 
     private var footer: some View {
         HStack {
             Button("Settings") { SettingsPanel.show(monitor: monitor) }
-                .controlSize(.small)
             Button("About") { AboutPanel.show() }
-                .controlSize(.small)
             Spacer()
             Button("Quit") { NSApp.terminate(nil) }
-                .controlSize(.small)
         }
+        .buttonStyle(ScouterButtonStyle())
     }
 
     // MARK: Helpers

@@ -51,36 +51,26 @@ struct SettingsView: View {
                 .foregroundStyle(Scouter.dim)
 
             row("Refresh every") {
-                Picker("Refresh every", selection: $monitor.refreshInterval) {
-                    Text("1 s").tag(1.0)
-                    Text("2 s").tag(2.0)
-                    Text("5 s").tag(5.0)
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 150)
+                ScouterSegmented(selection: $monitor.refreshInterval,
+                                 options: [("1 s", 1.0), ("2 s", 2.0), ("5 s", 5.0)])
+                    .frame(width: 150)
             }
             row("Enemies shown") {
-                Picker("Enemies shown", selection: $monitor.enemyCount) {
-                    Text("3").tag(3)
-                    Text("6").tag(6)
-                    Text("10").tag(10)
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 150)
+                ScouterSegmented(selection: $monitor.enemyCount,
+                                 options: [("3", 3), ("6", 6), ("10", 10)])
+                    .frame(width: 150)
             }
             row("Power level in the menu bar") {
                 Toggle("Power level in the menu bar", isOn: $monitor.showNumber)
-                    .labelsHidden().toggleStyle(.switch).controlSize(.small)
+                    .toggleStyle(ScouterToggleStyle())
             }
             row("Say \u{201C}It's over 9000!\u{201D} out loud") {
                 Toggle("Shout at 9000", isOn: $monitor.shoutEnabled)
-                    .labelsHidden().toggleStyle(.switch).controlSize(.small)
+                    .toggleStyle(ScouterToggleStyle())
             }
             row("Start at login") {
                 Toggle("Start at login", isOn: Binding(get: { launchAtLogin }, set: { setLaunchAtLogin($0) }))
-                    .labelsHidden().toggleStyle(.switch).controlSize(.small)
+                    .toggleStyle(ScouterToggleStyle())
             }
             if let loginError {
                 Text(loginError).font(.caption).foregroundStyle(.orange)
@@ -93,7 +83,7 @@ struct SettingsView: View {
                     .foregroundStyle(Scouter.dim)
                 Spacer()
                 Button("About") { AboutPanel.show() }
-                    .controlSize(.small)
+                    .buttonStyle(ScouterButtonStyle())
             }
         }
         .padding(.horizontal, 22)
@@ -106,7 +96,7 @@ struct SettingsView: View {
 
     private func row(_ label: String, @ViewBuilder _ control: () -> some View) -> some View {
         HStack {
-            Text(label).font(.callout)
+            Text(label).font(.system(size: 12, design: .monospaced))
             Spacer()
             control()
         }
