@@ -28,7 +28,24 @@ Native Swift/SwiftUI, no third-party dependencies, no root. Needs macOS 14+.
 
 Each form has its own menu bar icon, and the popover shows an original 8-bit mascot, drawn in code, whose pose, face, hair and aura change with the form.
 
-## Build and run
+## Install
+
+```bash
+brew install --cask stalin-uchiha7/powerlevel/powerlevel
+```
+
+To update: `brew upgrade --cask stalin-uchiha7/powerlevel/powerlevel`. If Homebrew says the tap is untrusted, run `brew trust --cask stalin-uchiha7/powerlevel/powerlevel` once.
+
+**Direct download:** get `PowerLevel-X.Y.Z.zip` from [Releases](https://github.com/Stalin-uchiha7/PowerLevel/releases/latest), unzip it, and move `PowerLevel.app` to Applications.
+
+Power Level is free and not notarized by Apple (notarization needs a paid Apple Developer account), so macOS blocks the first launch. To allow it:
+
+1. Open Power Level once.
+2. Go to System Settings → Privacy & Security, find "PowerLevel was blocked…", and click **Open Anyway**.
+
+Apple Silicon only, macOS 14 or later.
+
+## Build from source
 
 Needs the Xcode Command Line Tools (`xcode-select --install`).
 
@@ -37,6 +54,8 @@ swift run                      # quick dev run
 ./scripts/build-app.sh         # builds build/PowerLevel.app (ad-hoc signed)
 open build/PowerLevel.app
 ```
+
+The popover's **About** button shows the version and links.
 
 To start it at login, add `PowerLevel.app` in **System Settings → General → Login Items**.
 
@@ -51,6 +70,10 @@ Everything comes from public macOS APIs, so the app never asks for a password:
 - Voice: `AVSpeechSynthesizer`
 
 Blast and Force only work on your own processes. The app refuses to signal core macOS processes, and re-checks the process start time before a kill so a reused PID is never hit.
+
+## Releasing
+
+Bump `version.txt`, commit, then push a matching tag (`git tag v0.2.0 && git push origin v0.2.0`). The Release workflow builds the app, creates the GitHub Release with the zip, and updates the Homebrew tap when the `HOMEBREW_TAP_TOKEN` repo secret is set (a fine-grained token with Contents read/write on `Stalin-uchiha7/homebrew-powerlevel`).
 
 ## Roadmap
 
