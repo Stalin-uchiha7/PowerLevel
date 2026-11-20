@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - run: swift --version
+      - name: Build (debug)
+        run: swift build
+      - name: Build app bundle (release)
+        run: ./scripts/build-app.sh
+      - name: Zip app
+        run: ditto -c -k --keepParent build/PowerLevel.app build/PowerLevel.zip
+      - uses: actions/upload-artifact@v7
+        with:
+          name: PowerLevel-${{ github.sha }}
+          path: build/PowerLevel.zip
+          retention-days: 14
