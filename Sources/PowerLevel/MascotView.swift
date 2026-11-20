@@ -6,16 +6,6 @@ import AppKit
 struct MascotView: View {
     let form: PowerForm
 
-    private var tier: Int {
-        switch form {
-        case .base: 0
-        case .kaioken: 1
-        case .superSaiyan: 2
-        case .superSaiyan2: 3
-        case .over9000: 4
-        }
-    }
-
     private static let palette: [Character: Color] = [
         "k": Color(red: 0.23, green: 0.23, blue: 0.33),
         "K": Color(red: 0.36, green: 0.36, blue: 0.50),
@@ -37,7 +27,7 @@ struct MascotView: View {
     private static let accentWash: [Character: Double] = ["b": 0, "A": 0, "B": -0.3, "H": 0.25, "L": 0.65]
 
     var body: some View {
-        let rows = PixelSprite.frames[tier].map { Array($0) }
+        let rows = PixelSprite.frames[form.rawValue].map { Array($0) }
         let accent = form.color
         return Canvas { ctx, size in
             guard let width = rows.first?.count, width > 0 else { return }
@@ -69,14 +59,24 @@ struct MascotView: View {
 enum MascotSnapshot {
     static func write(to dir: URL) {
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let forms: [(String, PowerForm)] = [
-            ("0-base", .base), ("1-kaioken", .kaioken), ("2-super", .superSaiyan),
-            ("3-super2", .superSaiyan2), ("4-over9000", .over9000),
-        ]
-        for (name, form) in forms {
+        for form in PowerForm.allCases {
             save(MascotView(form: form).frame(width: 160, height: 208).background(Scouter.background),
-                 to: dir.appendingPathComponent("\(name).png"))
+                 to: dir.appendingPathComponent("form-\(form.rawValue).png"))
         }
+        let lineup = HStack(alignment: .top, spacing: 10) {
+            ForEach(PowerForm.allCases, id: \.rawValue) { form in
+                VStack(spacing: 4) {
+                    MascotView(form: form).frame(width: 80, height: 104)
+                    Text(form.title).foregroundStyle(form.color)
+                    Text(form == .ultraInstinct ? "9,001+" : "\(form.floor.formatted())+").foregroundStyle(Scouter.dim)
+                }
+                .font(.system(size: 9, weight: .semibold, design: .monospaced))
+                .frame(width: 96)
+            }
+        }
+        .padding(14)
+        .background(Scouter.background)
+        save(lineup, to: dir.appendingPathComponent("forms.png"))
         save(ScouterView(monitor: SystemMonitor()), to: dir.appendingPathComponent("popover.png"))
         save(AboutView(), to: dir.appendingPathComponent("about.png"))
         save(SettingsView(monitor: SystemMonitor()), to: dir.appendingPathComponent("settings.png"))

@@ -21,10 +21,13 @@ Native Swift/SwiftUI, no third-party dependencies, no root. Needs macOS 14+.
 | Power level | CPU | Form |
 |---|---|---|
 | 0 – 999 | < 8% | Base Form |
-| 1,000 – 2,999 | 8–25% | Kaioken |
-| 3,000 – 5,999 | 25–50% | Super Saiyan |
-| 6,000 – 9,000 | 50–75% | Super Saiyan 2 |
-| 9,001+ | > 75% | **IT'S OVER 9000!** |
+| 1,000 – 1,999 | 8–17% | Kaioken |
+| 2,000 – 3,499 | 17–29% | Super Saiyan |
+| 3,500 – 4,999 | 29–42% | Super Saiyan 2 |
+| 5,000 – 6,499 | 42–54% | Super Saiyan 3 |
+| 6,500 – 7,799 | 54–65% | Super Saiyan God |
+| 7,800 – 9,000 | 65–75% | Super Saiyan Blue |
+| 9,001+ | > 75% | **Ultra Instinct** ("IT'S OVER 9000!") |
 
 Each form has its own menu bar icon, and the popover shows an original 8-bit mascot, drawn in code, whose pose, face, hair and aura change with the form.
 

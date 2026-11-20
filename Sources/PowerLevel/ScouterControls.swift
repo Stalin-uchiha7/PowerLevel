@@ -10,6 +10,8 @@ struct ScouterButtonStyle: ButtonStyle {
         configuration.label
             .font(.system(size: compact ? 10 : 11, weight: .semibold, design: .monospaced))
             .textCase(.uppercase)
+            .lineLimit(1)
+            .fixedSize()
             .foregroundStyle(configuration.isPressed ? Scouter.background : tint)
             .padding(.horizontal, compact ? 6 : 10)
             .padding(.vertical, compact ? 2 : 4)
