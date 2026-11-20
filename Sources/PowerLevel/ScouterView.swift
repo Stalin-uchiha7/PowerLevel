@@ -125,6 +125,8 @@ struct ScouterView: View {
                 .controlSize(.mini)
                 .font(.caption)
             Spacer()
+            Button("About") { AboutPanel.show() }
+                .controlSize(.small)
             Button("Quit") { NSApp.terminate(nil) }
                 .controlSize(.small)
         }

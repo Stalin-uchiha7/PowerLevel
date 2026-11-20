@@ -1,0 +1,39 @@
+name: Release
+
+# Push a tag vX.Y.Z (matching version.txt) to build the app, create the GitHub Release and update the Homebrew tap.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    env:
+      TAG: ${{ github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+      HAS_TAP: ${{ secrets.HOMEBREW_TAP_TOKEN != '' }}   # tap update runs once the secret exists
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check the tag matches version.txt
+        run: |
+          VERSION=$(tr -d '[:space:]' < version.txt)
+          [ "v$VERSION" = "$TAG" ] || { echo "::error::Tag $TAG does not match version.txt ($VERSION)"; exit 1; }
+      - name: Build app (ad-hoc signed)
+        env:
+          POWERLEVEL_BUILD_NUMBER: ${{ github.run_number }}
+        run: ./scripts/build-app.sh
+      - name: Package
+        run: ./scripts/package-release.sh
+      - name: Create the GitHub Release
+        run: gh release create "$TAG" build/PowerLevel-*.zip build/PowerLevel-*.zip.sha256 --title "Power Level $TAG" --generate-notes
+      - name: Update Homebrew tap
+        if: env.HAS_TAP == 'true'
+        env:
+          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: ./scripts/publish-cask.sh build/powerlevel.rb "${TAG#v}"

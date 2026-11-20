@@ -78,6 +78,7 @@ enum MascotSnapshot {
                  to: dir.appendingPathComponent("\(name).png"))
         }
         save(ScouterView(monitor: SystemMonitor()), to: dir.appendingPathComponent("popover.png"))
+        save(AboutView(), to: dir.appendingPathComponent("about.png"))
     }
 
     private static func save(_ view: some View, to url: URL) {
