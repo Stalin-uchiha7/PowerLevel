@@ -43,14 +43,12 @@ struct ScouterView: View {
             Text("SCOUTER // POWER LEVEL")
                 .font(.system(.caption2, design: .monospaced))
                 .foregroundStyle(Scouter.dim)
-            HStack(alignment: .firstTextBaseline) {
+            HStack(alignment: .center) {
                 Text(monitor.powerLevel, format: .number)
                     .font(.system(size: 42, weight: .heavy, design: .monospaced))
                 Spacer()
-                Image(systemName: form.symbol)
-                    .font(.title)
-                    .foregroundStyle(form.color)
-                    .symbolEffect(.pulse, isActive: form == .over9000)
+                MascotView(form: form)
+                    .frame(width: 64, height: 64)
             }
             Text(form.title)
                 .font(.system(.headline, design: .monospaced))

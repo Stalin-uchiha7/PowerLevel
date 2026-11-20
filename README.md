@@ -26,7 +26,7 @@ Native Swift/SwiftUI, no third-party dependencies, no root. Needs macOS 14+.
 | 6,000 – 9,000 | 50–75% | Super Saiyan 2 |
 | 9,001+ | > 75% | **IT'S OVER 9000!** |
 
-Each form has its own menu bar icon.
+Each form has its own menu bar icon, and the popover shows an original mascot, drawn in code, whose pose, face, crest and aura change with the form.
 
 ## Build and run
 

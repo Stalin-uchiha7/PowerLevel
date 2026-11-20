@@ -20,6 +20,11 @@ struct PowerLevelApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        let args = CommandLine.arguments
+        if let i = args.firstIndex(of: "--mascot-snapshot"), args.count > i + 1 {
+            MascotSnapshot.write(to: URL(fileURLWithPath: args[i + 1]))
+            exit(0)
+        }
     }
 }
 
