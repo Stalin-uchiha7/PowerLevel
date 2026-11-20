@@ -53,36 +53,39 @@ def body(pose, face, hair, extra, long):
     sym(g, 10, 5, 10, 7, 'd')
     put(g, 20, 8, 'd'); put(g, 20, 9, 'd'); put(g, 16, 8, 'd')
 
-    # ---- hair
+    # ---- hair: a cap, a fringe and five shaded spikes (taller and more upright when powered up)
+    hs = 'j' if hair == 'calm' else 'h'
+    rows(g, [(0, R(8, 23)), (1, R(9, 22)), (2, R(10, 21)), (3, [10, 11, 12, 15, 16, 19, 20, 21]),
+             (4, [10, 11, 16, 21]), (5, [10, 21])], hc)
+    rows(g, [(1, [12, 18]), (2, [13, 19])], hl); rows(g, [(1, [22]), (2, [21]), (3, [21, 16])], hs)
     if hair != 'spiky':
-        rows(g, [(-5, [17]), (-4, [13, 17, 18]), (-3, [12, 13, 16, 17, 18, 22]),
-                 (-2, R(11, 14) + R(16, 19) + [21, 22]), (-1, [8] + R(10, 22)), (0, [8, 9] + R(10, 23)),
-                 (1, R(9, 23)), (2, R(10, 21)), (3, [10, 11, 12, 15, 16, 19, 20, 21]),
-                 (4, [10, 11, 16, 21]), (5, [10, 21])], hc)
-        rows(g, [(-3, [13, 17]), (-2, [12, 18]), (-4, [17]), (0, [11, 12, 18]), (1, [19, 14])], hl)
+        spikes = [(9, 13, 6, -2), (19, 23, 26, -3), (11, 15, 10, -6), (17, 21, 21, -5), (14, 18, 15, -8)]
     else:
-        rows(g, [(-8, [15]), (-7, [15, 16, 20]), (-6, [11, 14, 15, 16, 20]), (-5, [11, 12] + R(14, 17) + [19, 20]),
-                 (-4, R(10, 21)), (-3, R(9, 22)), (-2, R(8, 23)), (-1, R(7, 24)), (0, [6, 7] + R(9, 22) + [24, 25]),
-                 (1, R(9, 22)), (2, R(10, 21)), (3, [10, 11, 12, 15, 16, 19, 20, 21]),
-                 (4, [10, 11, 16, 21]), (5, [10, 21])], hc)
-        if extra:
-            rows(g, [(-10, [15]), (-9, [15, 16]), (-8, [16, 19, 20]), (-7, [11, 12]), (-6, [12, 19]), (-2, [6, 25]), (-3, [7, 24])], hc)
-        rows(g, [(-6, [15]), (-5, [15, 16]), (-4, [12, 15, 16, 19]), (-3, [11, 12, 16, 19, 20]),
-                 (-2, [10, 11, 17, 20]), (-1, [10, 17, 21]), (0, [12, 18]), (1, [13, 19])], hl)
+        up = 2 if extra else 0
+        spikes = [(8, 13, 5, -5), (19, 24, 27, -6), (10, 15, 10, -9 - up), (17, 22, 22, -10 - up), (13, 18, 16, -12 - up)]
+        if extra: spikes = [(8, 11, 3, 0), (21, 24, 29, -1)] + spikes
+    for (x0, x1, tx, ty) in spikes:
+        for y in range(ty, 1):
+            t = (y - ty) / max(-ty, 1)
+            l = round(tx + (x0 - tx) * t); r = round(tx + (x1 - tx) * t)
+            for x in range(l, r + 1): put(g, x, y, hc)
+            if r - l >= 2: put(g, r, y, hs)
+            if r - l >= 3: put(g, l + 1, y, hl)
 
-    # ---- scouter visor over one eye
-    rect(g, 11, 5, 15, 8, 'v'); rect(g, 11, 5, 15, 5, 'V'); put(g, 12, 6, 'w'); put(g, 13, 7, 'V')
-    rect(g, 9, 5, 10, 8, 'V')
-
-    # ---- eye, brow, mouth
+    # ---- eyes, brows, mouth
+    def eyes(pts, c):
+        for (x, y) in pts: put(g, x, y, c); put(g, x - 5, y, c)
+    def brows(pts):
+        for (x, y) in pts: put(g, x, y, 'e'); put(g, 31 - x, y, 'e')
     if face == 0:
-        put(g, 17, 7, 'e'); put(g, 18, 7, 'e'); put(g, 19, 6, 'e')
+        eyes([(17, 7), (18, 7), (19, 6)], 'e')
     elif face == 1:
-        rows(g, [(5, [17, 18, 19])], 'e'); put(g, 17, 6, 'w'); put(g, 18, 6, 'e'); put(g, 17, 7, 'w'); put(g, 18, 7, 'e')
+        brows([(17, 5), (18, 5), (19, 5)]); eyes([(17, 6), (17, 7)], 'w'); eyes([(18, 6), (18, 7)], 'e')
     elif face == 2:
-        rows(g, [(5, [16, 17]), (4, [18, 19])], 'e'); put(g, 17, 6, 'w'); put(g, 18, 6, 'e'); put(g, 17, 7, 'e')
+        brows([(16, 5), (17, 5), (18, 4), (19, 4)]); eyes([(17, 6)], 'w'); eyes([(18, 6), (17, 7)], 'e')
     else:
-        rect(g, 17, 5, 19, 7, 'w'); put(g, 18, 6, 'e')
+        brows([(17, 4), (18, 3), (19, 3)])
+        eyes([(x, y) for x in (17, 18, 19) for y in (5, 6, 7)], 'w'); eyes([(18, 6)], 'e')
     if face == 0:
         rows(g, [(10, [15, 16]), (9, [14, 17])], 'm')
     elif face == 1:
@@ -104,6 +107,20 @@ def body(pose, face, hair, extra, long):
         sym(g, 7, 12, 9, 15, 's'); sym(g, 6, 8, 8, 12, 's'); sym(g, 6, 8, 6, 12, 'd'); sym(g, 7, 10, 7, 11, 'S')
         sym(g, 5, 4, 7, 8, 's'); sym(g, 5, 4, 5, 8, 'd')
         sym(g, 5, 2, 7, 3, 'p'); sym(g, 5, -1, 7, 1, 's'); sym(g, 5, 1, 7, 1, 'd')
+
+    # ---- muscle definition: shoulders, biceps, pecs, abs, thighs
+    if pose == 0:
+        sym(g, 7, 13, 9, 13, 's'); sym(g, 8, 13, 8, 13, 'S')
+        sym(g, 6, 15, 6, 19, 'd'); sym(g, 7, 15, 7, 19, 's'); sym(g, 8, 15, 8, 17, 'S'); sym(g, 7, 20, 9, 20, 'd')
+        sym(g, 11, 26, 11, 29, 'F'); sym(g, 11, 30, 13, 30, 'G')
+    else:
+        if pose == 1:
+            sym(g, 7, 12, 8, 12, 's'); sym(g, 7, 13, 9, 13, 's'); sym(g, 7, 12, 7, 12, 'S'); sym(g, 8, 13, 8, 13, 'S')
+            sym(g, 5, 12, 5, 13, 'S')
+        else:
+            sym(g, 8, 13, 8, 14, 'S'); sym(g, 9, 9, 9, 11, 's'); sym(g, 9, 11, 9, 11, 'd'); sym(g, 8, 9, 8, 10, 'S')
+        sym(g, 9, 27, 9, 29, 'F'); sym(g, 9, 30, 12, 30, 'G')
+    sym(g, 11, 15, 12, 15, 'F'); sym(g, 11, 18, 13, 18, 'G'); sym(g, 13, 20, 14, 20, 'G'); sym(g, 12, 19, 12, 19, 'F')
     return g
 
 def aura(g, tier):
@@ -141,7 +158,7 @@ def aura(g, tier):
 PAL = {'k': (0x3a, 0x3a, 0x55), 'K': (0x5c, 0x5c, 0x80), 's': (0xf1, 0xc2, 0x7d), 'S': (0xff, 0xdd, 0xa8),
        'd': (0xc6, 0x86, 0x42), 'g': (0x29, 0x6b, 0xdb), 'G': (0x1a, 0x45, 0x99), 'v': (0x40, 0xff, 0x80),
        'V': (0x1c, 0x9a, 0x50), 'e': (0x14, 0x14, 0x1c), 'w': (0xff, 0xff, 0xff), 'o': (0xee, 0x78, 0x1a),
-       'O': (0x9e, 0x48, 0x0d), 'p': (0xff, 0x8c, 0x1a), 'm': (0x8a, 0x2c, 0x2c)}
+       'O': (0x9e, 0x48, 0x0d), 'j': (0x24, 0x24, 0x38), 'F': (0x5a, 0x93, 0xf0), 'p': (0xff, 0x8c, 0x1a), 'm': (0x8a, 0x2c, 0x2c)}
 ACC = [(0x40,0xff,0x80),(0xff,0x45,0x3a),(0xff,0xd6,0x0a),(0xff,0xd9,0x33),(0xff,0xa8,0x14),(0xff,0x38,0x70),(0x38,0xb8,0xff),(0xd6,0xe4,0xff)]
 BG = (5, 20, 10)
 def mix(a, b, t): return tuple((a[i] * (100 - t) + b[i] * t) // 100 for i in range(3))
@@ -157,6 +174,7 @@ def png(path, g, tier, scale=6):
             elif c in 'bA': col = acc
             elif c == 'B': col = mix(acc, (0, 0, 0), 30)
             elif c == 'H': col = mix(acc, (255, 255, 255), 25)
+            elif c == 'h': col = mix(acc, (0, 0, 0), 18)
             elif c == 'L': col = mix(acc, (255, 255, 255), 65)
             elif c == 'a': col = mix(acc, BG, 55)
             else: col = PAL[c]

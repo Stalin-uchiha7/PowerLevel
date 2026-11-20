@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// Original 8-bit mascot, drawn in code from `PixelSprite`: a spiky-haired fighter with a scouter visor whose pose, face,
+/// Original 8-bit mascot, drawn in code from `PixelSprite`: a spiky-haired fighter whose pose, face,
 /// hair and aura follow the form. It is a static drawing, so it only redraws when the form changes.
 struct MascotView: View {
     let form: PowerForm
@@ -13,9 +13,9 @@ struct MascotView: View {
         "S": Color(red: 1.00, green: 0.87, blue: 0.66),
         "d": Color(red: 0.78, green: 0.53, blue: 0.26),
         "g": Color(red: 0.16, green: 0.42, blue: 0.86),
+        "F": Color(red: 0.35, green: 0.58, blue: 0.94),
+        "j": Color(red: 0.14, green: 0.14, blue: 0.22),
         "G": Color(red: 0.10, green: 0.27, blue: 0.60),
-        "v": Scouter.green,
-        "V": Color(red: 0.11, green: 0.60, blue: 0.31),
         "e": Color(red: 0.08, green: 0.08, blue: 0.11),
         "w": .white,
         "o": Color(red: 0.93, green: 0.47, blue: 0.10),
@@ -24,7 +24,7 @@ struct MascotView: View {
         "m": Color(red: 0.54, green: 0.17, blue: 0.17),
     ]
     /// Cells drawn in the form colour, with a white or black wash on top (positive lightens, negative darkens).
-    private static let accentWash: [Character: Double] = ["b": 0, "A": 0, "B": -0.3, "H": 0.25, "L": 0.65]
+    private static let accentWash: [Character: Double] = ["b": 0, "A": 0, "B": -0.3, "h": -0.18, "H": 0.25, "L": 0.65]
 
     var body: some View {
         let rows = PixelSprite.frames[form.rawValue].map { Array($0) }
