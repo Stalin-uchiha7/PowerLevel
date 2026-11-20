@@ -39,6 +39,7 @@ final class SystemMonitor: ObservableObject {
     private var prevTicks: (busy: UInt64, total: UInt64)?
     private var prevProcTimes: [pid_t: UInt64] = [:]
     private var prevSampleTime: UInt64 = 0
+    private var iconCache: [pid_t: NSImage] = [:]
     private let speech = AVSpeechSynthesizer()
     private var lastShout = Date.distantPast
     private var wasOver9000 = false
@@ -138,6 +139,7 @@ final class SystemMonitor: ObservableObject {
             }
         }
         prevProcTimes = times
+        iconCache = iconCache.filter { times[$0.key] != nil }
         prevSampleTime = now
 
         enemies = ranked
@@ -151,8 +153,28 @@ final class SystemMonitor: ObservableObject {
                     cpuPercent: entry.cpu,
                     memoryBytes: entry.mem,
                     startTime: Self.startTime(entry.pid),
-                    icon: app?.icon)
+                    icon: smallIcon(for: app, pid: entry.pid))
             }
+    }
+
+    /// App icons are large multi-size images; draw a 32 px copy once per process instead of every tick.
+    private func smallIcon(for app: NSRunningApplication?, pid: pid_t) -> NSImage? {
+        if let cached = iconCache[pid] { return cached }
+        guard let icon = app?.icon else { return nil }
+        let side = 32
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: side, pixelsHigh: side, bitsPerSample: 8,
+            samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0),
+              let context = NSGraphicsContext(bitmapImageRep: rep) else { return icon }
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = context
+        icon.draw(in: NSRect(x: 0, y: 0, width: side, height: side))
+        NSGraphicsContext.restoreGraphicsState()
+        let small = NSImage(size: NSSize(width: 16, height: 16))
+        small.addRepresentation(rep)
+        iconCache[pid] = small
+        return small
     }
 
     private static func processName(_ pid: pid_t) -> String {

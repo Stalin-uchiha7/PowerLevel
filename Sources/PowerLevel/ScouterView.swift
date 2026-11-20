@@ -46,8 +46,6 @@ struct ScouterView: View {
             HStack(alignment: .firstTextBaseline) {
                 Text(monitor.powerLevel, format: .number)
                     .font(.system(size: 42, weight: .heavy, design: .monospaced))
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: monitor.powerLevel)
                 Spacer()
                 Image(systemName: form.symbol)
                     .font(.title)
