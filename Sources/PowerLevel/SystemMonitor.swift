@@ -25,7 +25,7 @@ final class SystemMonitor: ObservableObject {
     @Published private(set) var enemies: [Enemy] = []
     @Published private(set) var history: [Int] = []
     @Published var lastMessage: String?
-    @Published var shoutEnabled: Bool = UserDefaults.standard.object(forKey: "shoutEnabled") as? Bool ?? true {
+    @Published var shoutEnabled: Bool = UserDefaults.standard.object(forKey: "shoutEnabled") as? Bool ?? false {
         didSet { UserDefaults.standard.set(shoutEnabled, forKey: "shoutEnabled") }
     }
 

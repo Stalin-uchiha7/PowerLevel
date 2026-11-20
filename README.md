@@ -9,7 +9,7 @@ Native Swift/SwiftUI, no third-party dependencies, no root. Needs macOS 14+.
 | Scouter reading | What it means on the Mac |
 |---|---|
 | Power level | CPU % × 120 (100% CPU = 12,000) |
-| "It's over 9000!" | Spoken out loud when CPU passes 75% (at most once every 2 minutes; can be turned off) |
+| "It's over 9000!" | Spoken out loud when CPU passes 75% (off by default; turn on "Shout at 9000" in the popover; at most once every 2 minutes) |
 | Ki | CPU usage |
 | Stamina | RAM used / total (Activity Monitor's formula) |
 | Ki Heat | macOS thermal state (Calm → Warm → Overheating → Meltdown) |
